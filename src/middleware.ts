@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 
 const PUBLIC_PATHS = ["/login"]
 
-export function proxy(req: NextRequest) {
+export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
   const isPublic = PUBLIC_PATHS.some(p => pathname.startsWith(p))
   const hasToken = req.cookies.has("iol_access")
