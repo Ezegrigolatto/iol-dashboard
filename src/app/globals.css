@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --radius: 0.75rem;
+  --sidebar-width: 260px;
+}
+
+@layer base {
+  :root {
+    --bg: 0 0% 98%;
+    --fg: 220 20% 8%;
+    --card: 0 0% 100%;
+    --primary: 217 91% 50%;
+    --secondary: 220 14% 94%;
+    --muted: 220 14% 94%;
+    --muted-fg: 220 10% 50%;
+    --accent: 217 91% 95%;
+    --accent-fg: 217 91% 30%;
+    --destructive: 0 84% 56%;
+    --success: 142 71% 40%;
+    --warning: 38 92% 50%;
+    --border: 220 13% 88%;
+    --input: 220 13% 88%;
+    --ring: 217 91% 50%;
+  }
+
+  .dark {
+    --bg: 222 24% 7%;
+    --fg: 210 20% 94%;
+    --card: 222 22% 10%;
+    --primary: 217 91% 60%;
+    --secondary: 222 20% 16%;
+    --muted: 222 20% 14%;
+    --muted-fg: 215 15% 55%;
+    --accent: 217 40% 18%;
+    --accent-fg: 217 91% 75%;
+    --destructive: 0 72% 55%;
+    --success: 142 60% 45%;
+    --warning: 38 80% 55%;
+    --border: 222 18% 18%;
+    --input: 222 18% 18%;
+    --ring: 217 91% 60%;
+  }
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background-color: hsl(var(--bg));
+    color: hsl(var(--fg));
+    font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+}
+
+@utility glass {
+  background: hsl(var(--card) / 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid hsl(var(--border) / 0.6);
+}
+
+@utility positive {
+  color: hsl(var(--success));
+}
+
+@utility negative {
+  color: hsl(var(--destructive));
+}
+
+@utility animate-fade-up {
+  animation: fadeUp 0.5s ease both;
+}
+
+@utility animate-in {
+  animation: animateIn 0.4s ease both;
+}
+
+@utility animate-slide-in {
+  animation: slideIn 0.35s ease both;
+}
+
+@utility skeleton-pulse {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 25%,
+    hsl(var(--border)) 50%,
+    hsl(var(--muted)) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite;
+}
+
+@utility stagger-1 { animation-delay: 0.05s; }
+@utility stagger-2 { animation-delay: 0.1s; }
+@utility stagger-3 { animation-delay: 0.15s; }
+@utility stagger-4 { animation-delay: 0.2s; }
+@utility stagger-5 { animation-delay: 0.25s; }
+
+@keyframes animateIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: hsl(var(--muted-fg) / 0.5); }
