@@ -1,24 +1,24 @@
-"use client"
+'use client';
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { LayoutDashboard, User, BarChart2, LogOut, TrendingUp } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { useAuth } from "@/hooks/useAuth"
-import { ThemeToggle } from "./ThemeToggle"
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { LayoutDashboard, User, BarChart2, LogOut, TrendingUp } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
+import { ThemeToggle } from './ThemeToggle';
 
 const navItems = [
-  { href: "/", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/operaciones", label: "Operaciones", icon: BarChart2 },
-  { href: "/perfil", label: "Mi Perfil", icon: User },
-]
+  { href: '/', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/operaciones', label: 'Operaciones', icon: BarChart2 },
+  { href: '/perfil', label: 'Mi Perfil', icon: User },
+];
 
 export function Sidebar() {
-  const pathname = usePathname()
-  const { userName, logout } = useAuth()
+  const pathname = usePathname();
+  const { userName, logout } = useAuth();
 
   return (
-    <aside className="fixed left-0 top-0 z-40 flex h-screen w-[var(--sidebar-width)] flex-col border-r border-[hsl(var(--border))] bg-[hsl(var(--card))]">
+    <aside className="fixed left-0 top-0 z-40 hidden lg:flex h-screen w-[var(--sidebar-width)] flex-col border-r border-[hsl(var(--border))] bg-[hsl(var(--card))]">
       <div className="flex items-center gap-3 px-5 py-5 border-b border-[hsl(var(--border))]">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[hsl(var(--primary))]">
           <TrendingUp className="h-4 w-4 text-white" />
@@ -31,17 +31,17 @@ export function Sidebar() {
 
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
         {navItems.map(({ href, label, icon: Icon }, i) => {
-          const active = pathname === href
+          const active = pathname === href;
           return (
             <Link
               key={href}
               href={href}
               className={cn(
-                "animate-slide-in flex items-center gap-3 rounded-[var(--radius)] px-3 py-2.5 text-sm font-medium transition-all duration-150",
+                'animate-slide-in flex items-center gap-3 rounded-[var(--radius)] px-3 py-2.5 text-sm font-medium transition-all duration-150',
                 `stagger-${i + 1}`,
                 active
-                  ? "bg-[hsl(var(--accent))] text-[hsl(var(--primary))]"
-                  : "text-[hsl(var(--muted-fg))] hover:bg-[hsl(var(--secondary))] hover:text-[hsl(var(--fg))]"
+                  ? 'bg-[hsl(var(--accent))] text-[hsl(var(--primary))]'
+                  : 'text-[hsl(var(--muted-fg))] hover:bg-[hsl(var(--secondary))] hover:text-[hsl(var(--fg))]'
               )}
             >
               <Icon className="h-4 w-4 shrink-0" />
@@ -50,7 +50,7 @@ export function Sidebar() {
                 <span className="ml-auto h-1.5 w-1.5 rounded-full bg-[hsl(var(--primary))]" />
               )}
             </Link>
-          )
+          );
         })}
       </nav>
 
@@ -71,5 +71,5 @@ export function Sidebar() {
         </button>
       </div>
     </aside>
-  )
+  );
 }

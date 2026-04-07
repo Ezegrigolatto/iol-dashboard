@@ -107,7 +107,7 @@ export default function DashboardPage() {
           onRetry={refetchCuenta}
         />
       ) : (
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
+        <div className="grid md:grid-cols-2 gap-4 lg:grid-cols-3">
           <StatCard
             title="Portafolio ARS"
             value={totalizadoARS}
@@ -138,7 +138,7 @@ export default function DashboardPage() {
       )}
 
       {!errorCuenta && !loadingCuenta && (
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 animate-fade-up stagger-2">
+        <div className="grid md:grid-cols-2 gap-4 lg:grid-cols-3 animate-fade-up stagger-2">
           <StatCard
             title="Ganancia ARS"
             value={gananciaARS}
