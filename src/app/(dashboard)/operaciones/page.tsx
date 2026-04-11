@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { clientApi } from '@/lib/client-api';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,6 +16,7 @@ import {
 import { ErrorState } from '@/components/ui/error-state';
 import { cn, formatCurrency, formatDateShort, estadoToLabel } from '@/lib/utils';
 import { ChevronUp, ChevronDown, ChevronsUpDown, Filter } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 type SortKey = 'fechaOrden' | 'monto' | 'cantidad' | 'precio';
 type SortDir = 'asc' | 'desc';
@@ -35,6 +36,7 @@ function estadoBadgeVariant(estado: string) {
 }
 
 export default function OperacionesPage() {
+  const router = useRouter();
   const [estado, setEstado] = useState('Todos');
   const [pais, setPais] = useState('Todos');
   const [sortKey, setSortKey] = useState<SortKey>('fechaOrden');
@@ -53,6 +55,12 @@ export default function OperacionesPage() {
         pais: pais !== 'Todos' ? pais : undefined,
       }),
   });
+
+  useEffect(() => {
+    if (error && error.message === 'NO_AUTH') {
+      router.push('/login');
+    }
+  }, [error, router]);
 
   const sorted = operaciones?.slice()?.sort((a, b) => {
     const mult = sortDir === 'asc' ? 1 : -1;

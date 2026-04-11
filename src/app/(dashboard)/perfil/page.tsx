@@ -1,24 +1,32 @@
-"use client"
+'use client';
 
-import { useQuery } from "@tanstack/react-query"
-import { clientApi } from "@/lib/client-api"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Skeleton } from "@/components/ui/skeleton"
-import { ErrorState } from "@/components/ui/error-state"
+import { useQuery } from '@tanstack/react-query';
+import { clientApi } from '@/lib/client-api';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
+import { ErrorState } from '@/components/ui/error-state';
 import {
-  User, Mail, Hash, CreditCard, Shield,
-  CheckCircle, XCircle, AlertCircle,
-} from "lucide-react"
+  User,
+  Mail,
+  Hash,
+  CreditCard,
+  Shield,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+} from 'lucide-react';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 function InfoRow({
   label,
   value,
   icon: Icon,
 }: {
-  label: string
-  value: string | undefined | null
-  icon?: React.ElementType
+  label: string;
+  value: string | undefined | null;
+  icon?: React.ElementType;
 }) {
   return (
     <div className="flex items-center justify-between py-3 border-b border-[hsl(var(--border)/0.5)] last:border-0">
@@ -26,9 +34,9 @@ function InfoRow({
         {Icon && <Icon className="h-3.5 w-3.5" />}
         {label}
       </div>
-      <span className="text-xs font-medium">{value ?? "—"}</span>
+      <span className="text-xs font-medium">{value ?? '—'}</span>
     </div>
-  )
+  );
 }
 
 function StatusBool({ value, label }: { value: boolean; label: string }) {
@@ -47,16 +55,23 @@ function StatusBool({ value, label }: { value: boolean; label: string }) {
         </div>
       )}
     </div>
-  )
+  );
 }
 
 export default function PerfilPage() {
+  const router = useRouter();
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["perfil"],
+    queryKey: ['perfil'],
     queryFn: () => clientApi.getPerfil(),
-  })
+  });
 
-  if (error) return <ErrorState message="Error al cargar el perfil" onRetry={refetch} />
+  useEffect(() => {
+    if (error && error.message === 'NO_AUTH') {
+      router.push('/login');
+    }
+  }, [error, router]);
+
+  if (error) return <ErrorState message="Error al cargar el perfil" onRetry={refetch} />;
 
   return (
     <div className="space-y-5 pb-8 max-w-2xl">
@@ -82,20 +97,29 @@ export default function PerfilPage() {
               <>
                 <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[hsl(var(--accent))] text-[hsl(var(--primary))]">
                   <span className="text-2xl font-bold">
-                    {data?.nombre?.[0]?.toUpperCase()}{data?.apellido?.[0]?.toUpperCase()}
+                    {data?.nombre?.[0]?.toUpperCase()}
+                    {data?.apellido?.[0]?.toUpperCase()}
                   </span>
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold">{data?.nombre} {data?.apellido}</h3>
+                  <h3 className="text-lg font-bold">
+                    {data?.nombre} {data?.apellido}
+                  </h3>
                   <div className="flex items-center gap-2 mt-1">
                     <Badge
-                      variant={data?.cuentaAbierta ? "success" : "destructive"}
+                      variant={data?.cuentaAbierta ? 'success' : 'destructive'}
                       className="text-[10px]"
                     >
                       {data?.cuentaAbierta ? (
-                        <><CheckCircle className="h-2.5 w-2.5 mr-1" />Cuenta activa</>
+                        <>
+                          <CheckCircle className="h-2.5 w-2.5 mr-1" />
+                          Cuenta activa
+                        </>
                       ) : (
-                        <><XCircle className="h-2.5 w-2.5 mr-1" />Cuenta inactiva</>
+                        <>
+                          <XCircle className="h-2.5 w-2.5 mr-1" />
+                          Cuenta inactiva
+                        </>
                       )}
                     </Badge>
                     {data?.perfilInversor && (
@@ -141,14 +165,23 @@ export default function PerfilPage() {
             </div>
           ) : (
             <>
-              <StatusBool value={data?.actualizarDDJJ ?? false} label="DDJJ patrimonial" />
-              <StatusBool value={data?.actualizarTestInversor ?? false} label="Test de inversor" />
-              <StatusBool value={data?.actualizarTyC ?? false} label="Términos y condiciones" />
+              <StatusBool
+                value={data?.actualizarDDJJ ?? false}
+                label="DDJJ patrimonial"
+              />
+              <StatusBool
+                value={data?.actualizarTestInversor ?? false}
+                label="Test de inversor"
+              />
+              <StatusBool
+                value={data?.actualizarTyC ?? false}
+                label="Términos y condiciones"
+              />
               <StatusBool value={data?.actualizarTyCApp ?? false} label="Términos app" />
             </>
           )}
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

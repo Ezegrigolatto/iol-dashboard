@@ -6,6 +6,7 @@ import { LayoutDashboard, User, BarChart2, LogOut, TrendingUp } from 'lucide-rea
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { ThemeToggle } from './ThemeToggle';
+import { useQueryClient } from '@tanstack/react-query';
 
 const navItems = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -15,7 +16,14 @@ const navItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const queryClient = useQueryClient();
   const { userName, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout().then(() => {
+      queryClient.clear();
+    });
+  };
 
   return (
     <aside className="fixed left-0 top-0 z-40 hidden lg:flex h-screen w-[var(--sidebar-width)] flex-col border-r border-[hsl(var(--border))] bg-[hsl(var(--card))]">
@@ -63,7 +71,7 @@ export function Sidebar() {
           <ThemeToggle />
         </div>
         <button
-          onClick={logout}
+          onClick={handleLogout}
           className="flex w-full items-center gap-3 rounded-[var(--radius)] px-3 py-2 text-sm font-medium text-[hsl(var(--muted-fg))] hover:bg-[hsl(var(--destructive))/0.1] hover:text-[hsl(var(--destructive))] transition-all duration-150"
         >
           <LogOut className="h-4 w-4" />

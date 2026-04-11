@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Wallet, DollarSign, TrendingUp, Activity } from 'lucide-react';
 import { clientApi } from '@/lib/client-api';
@@ -19,8 +19,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ErrorState } from '@/components/ui/error-state';
+import { useRouter } from 'next/navigation';
 
 export default function DashboardPage() {
+  const router = useRouter();
   const [pais, setPais] = useState('argentina');
 
   const {
@@ -47,6 +49,15 @@ export default function DashboardPage() {
     queryKey: ['dolarMep'],
     queryFn: () => clientApi.getCotizaciónMEP('AL30'),
   });
+
+  useEffect(() => {
+    if (
+      (errorCuenta && errorCuenta.message === 'NO_AUTH') ||
+      (errorPortafolio && errorPortafolio.message === 'NO_AUTH')
+    ) {
+      router.push('/login');
+    }
+  }, [errorCuenta, errorPortafolio, router]);
 
   const activos = portafolio?.activos ?? [];
   const cuentas = cuenta?.cuentas ?? [];

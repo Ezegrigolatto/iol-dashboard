@@ -1,13 +1,12 @@
-import {
-  EstadoCuenta,
-  Portafolio,
-  Operacion,
-  PerfilUsuario,
-} from '@/types';
+import { EstadoCuenta, Portafolio, Operacion, PerfilUsuario } from '@/types';
 
 async function apiFetch<T>(url: string): Promise<T> {
   const res = await fetch(url, { credentials: 'include' });
-  if (res.status === 401) throw new Error('NO_AUTH');
+  if (res.status === 401) {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    throw new Error('NO_AUTH');
+  }
+
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
     throw new Error(body.error ?? `HTTP ${res.status}`);
@@ -35,9 +34,7 @@ export const clientApi = {
 
   getPerfil: (): Promise<PerfilUsuario> => apiFetch('/api/perfil'),
 
-  getCotizaciónMEP: (
-    currency: string
-  ): Promise<number> =>
+  getCotizaciónMEP: (currency: string): Promise<number> =>
     apiFetch(`/api/mep/?simbolo=${currency}`),
 
   login: async (
