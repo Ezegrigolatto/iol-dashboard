@@ -6,6 +6,7 @@ import { LayoutDashboard, BarChart2, User, LogOut, Sun, Moon } from 'lucide-reac
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
 import { useTheme } from 'next-themes';
+import { useQueryClient } from '@tanstack/react-query';
 
 const leftItems = [
   { href: '/operaciones', label: 'Ops', icon: BarChart2 },
@@ -16,9 +17,16 @@ const ITEM_W = 72;
 
 export function BottomNav() {
   const pathname = usePathname();
+  const queryClient = useQueryClient();
   const { logout } = useAuth();
   const { theme, setTheme } = useTheme();
   const isHome = pathname === '/';
+
+  const handleLogout = () => {
+    logout().then(() => {
+      queryClient.clear();
+    });
+  };
 
   return (
     <div className="fixed bottom-2 left-1/2 -translate-x-1/2 z-50 lg:hidden">
@@ -116,7 +124,7 @@ export function BottomNav() {
           </button>
 
           <button
-            onClick={logout}
+            onClick={handleLogout}
             style={{ width: ITEM_W }}
             className="relative flex flex-col items-center justify-center gap-0.5 py-2.5 rounded-[10px]
                        text-[10px] font-semibold tracking-wide
