@@ -16,7 +16,7 @@ import {
 import { ErrorState } from '@/components/ui/error-state';
 import { cn, formatCurrency, formatDateShort, estadoToLabel } from '@/lib/utils';
 import { ChevronUp, ChevronDown, ChevronsUpDown, Filter } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
 
 type SortKey = 'fechaOrden' | 'monto' | 'cantidad' | 'precio';
 type SortDir = 'asc' | 'desc';
@@ -36,7 +36,7 @@ function estadoBadgeVariant(estado: string) {
 }
 
 export default function OperacionesPage() {
-  const router = useRouter();
+  const { logout } = useAuth();
   const [estado, setEstado] = useState('Todos');
   const [pais, setPais] = useState('Todos');
   const [sortKey, setSortKey] = useState<SortKey>('fechaOrden');
@@ -58,9 +58,9 @@ export default function OperacionesPage() {
 
   useEffect(() => {
     if (error && error.message === 'NO_AUTH') {
-      router.push('/login');
+      logout();
     }
-  }, [error, router]);
+  }, [error, logout]);
 
   const sorted = operaciones?.slice()?.sort((a, b) => {
     const mult = sortDir === 'asc' ? 1 : -1;

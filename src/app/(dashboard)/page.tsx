@@ -19,10 +19,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ErrorState } from '@/components/ui/error-state';
-import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function DashboardPage() {
-  const router = useRouter();
+  const { logout } = useAuth();
   const [pais, setPais] = useState('argentina');
 
   const {
@@ -55,9 +55,9 @@ export default function DashboardPage() {
       (errorCuenta && errorCuenta.message === 'NO_AUTH') ||
       (errorPortafolio && errorPortafolio.message === 'NO_AUTH')
     ) {
-      router.push('/login');
+      logout();
     }
-  }, [errorCuenta, errorPortafolio, router]);
+  }, [errorCuenta, errorPortafolio, logout]);
 
   const activos = portafolio?.activos ?? [];
   const cuentas = cuenta?.cuentas ?? [];

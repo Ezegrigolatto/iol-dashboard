@@ -17,7 +17,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
 
 function InfoRow({
   label,
@@ -59,7 +59,7 @@ function StatusBool({ value, label }: { value: boolean; label: string }) {
 }
 
 export default function PerfilPage() {
-  const router = useRouter();
+  const { logout } = useAuth();
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['perfil'],
     queryFn: () => clientApi.getPerfil(),
@@ -67,9 +67,9 @@ export default function PerfilPage() {
 
   useEffect(() => {
     if (error && error.message === 'NO_AUTH') {
-      router.push('/login');
+      logout();
     }
-  }, [error, router]);
+  }, [error, logout]);
 
   if (error) return <ErrorState message="Error al cargar el perfil" onRetry={refetch} />;
 
